@@ -86,7 +86,7 @@
             "coordinates": [48.8956518, 2.3471656]
         },
         "openings": {
-            "Monday": [[12,17]],
+            "Monday": [[8,10],[15,18]],
             "Tuesday": [[12,17]],
             "Wednesday": [[12,17]],
             "Thursday": [[12,17]],
