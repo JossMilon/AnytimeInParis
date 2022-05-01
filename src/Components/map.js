@@ -10,12 +10,10 @@ const Map = ({ locations }) => {
           style={{ height: "100%" }}
           center={[48.8924960, 2.3440200]}
           zoom={15}
-          scrollWheelZoom={false}
-        >
+          scrollWheelZoom={false}>
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
           {locations.map((location, index) => {
             return (
               <Marker key={location.properties.location_id} position={[location.geography.coordinates[0], location.geography.coordinates[1]]}>
