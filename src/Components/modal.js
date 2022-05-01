@@ -7,13 +7,13 @@ import DeleteIcon from '@mui/icons-material/Remove';
 import { useState } from "react";
 
 const AddLocationModal = ({ open, handleClose, weekDays, weekDaysInFr }) => {
-    //Adding component usestate
+    //Declaring component usestate
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [latitude, setLatitude] = useState("");
     const [longitude, setLongitude] = useState("");
     const [openingTimes, setOpeningTimes] = useState({Monday: [[]], Tuesday: [[]], Wednesday: [[]], Thursday: [[]], Friday: [[]], Saturday: [[]], Sunday: [[]]});
-    //Adding component local handler function
+    //Declaring component local handler function
     const addOpenings = (day) => {
         const newOpenings = {...openingTimes};
         newOpenings[day].push([]);

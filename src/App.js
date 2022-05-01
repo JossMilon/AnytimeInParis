@@ -1,5 +1,4 @@
 // CHECK HOW TO ADD CSS RESET TO REACT PROJECTS
-// CHECK HOW TO DEAL WITH HOURS
 
 import { Box, CssBaseline } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -35,7 +34,7 @@ function App() {
   const [locations, setLocations] = useState(locationsFromJson.data); 
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(23);
-  const [weekDaySelected, setWeekDaySelected] = useState([]);
+  const [weekDaySelected, setWeekDaySelected] = useState(["Monday"]);
   const [open, setOpen] = useState(false);
   // Declaring handle functions
   const handleOpen = () => setOpen(true);
@@ -62,10 +61,27 @@ function App() {
   return (
     <Box sx={{ display: 'flex' }}>
     <CssBaseline />
-      <NavBar weekDaySelected={weekDaySelected} startTime={startTime} endTime={endTime} weekDaysInFr={weekDaysInFr} />
-      <SideMenu setStartTime={setStartTime} setEndTime={setEndTime} weekDaySelected={weekDaySelected} setWeekDaySelected={setWeekDaySelected} weekDays={weekDays} weekDaysInFr={weekDaysInFr} tags={tags} handleOpen={handleOpen} />
-      <Map locations={locations} />
-      <AddLocationModal open={open} handleClose={handleClose} weekDays={weekDays} weekDaysInFr={weekDaysInFr} />
+      <NavBar 
+        weekDaySelected={weekDaySelected} 
+        startTime={startTime} 
+        endTime={endTime} 
+        weekDaysInFr={weekDaysInFr} />
+      <SideMenu 
+        setStartTime={setStartTime} 
+        setEndTime={setEndTime} 
+        weekDaySelected={weekDaySelected} 
+        setWeekDaySelected={setWeekDaySelected} 
+        weekDays={weekDays} 
+        weekDaysInFr={weekDaysInFr} 
+        tags={tags} 
+        handleOpen={handleOpen} />
+      <Map 
+        locations={locations} />
+      <AddLocationModal 
+        open={open} 
+        handleClose={handleClose} 
+        weekDays={weekDays} 
+        weekDaysInFr={weekDaysInFr} />
   </Box>
   );
 }

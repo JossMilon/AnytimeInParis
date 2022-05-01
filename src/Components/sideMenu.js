@@ -1,18 +1,21 @@
 //Importing packages
-import { Button, Chip, Grid, Select, FormControl, MenuItem, InputLabel, Box, Drawer, Toolbar, Slider, Typography, Divider, OutlinedInput } from '@mui/material';
+import { Button, Grid, Select, FormControl, MenuItem, InputLabel, Box, Drawer, Toolbar, Slider, Typography, Divider, OutlinedInput } from "@mui/material";
+// import { Chip } from "@mui/material";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 
 const SideMenu = ({ setWeekDaySelected, setStartTime, setEndTime, weekDaySelected, weekDays, weekDaysInFr, tags, handleOpen }) => {
-    const drawerWidth = 300;
-    const handleWeekDays = (event) => {
-        const {
-          target: { value },
-        } = event;
-        setWeekDaySelected(
-          typeof value === 'string' ? value.split(',') : value,
-        );
-      };
+  //Declaring component local variables  
+  const drawerWidth = 300;
+  //Declaring component local handler function
+  const handleWeekDays = (event) => {
+      const {
+        target: { value },
+      } = event;
+      setWeekDaySelected(
+        typeof value === 'string' ? value.split(',') : value,
+      );
+    };
     return (
         <Drawer
         variant="permanent"
@@ -20,21 +23,20 @@ const SideMenu = ({ setWeekDaySelected, setStartTime, setEndTime, weekDaySelecte
           width: drawerWidth,
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-        }}
-      >
+        }}>
         <Toolbar />
         <Box sx={{ overflow: 'auto', padding: '20px' }}>
           <Box sx={{ width: "100%", paddingBottom: "40px", paddingTop: "40px" }}>
             <Grid container spacing={2} alignItems="center">
             <Grid item>
-              <Typography id="input-slider" gutterBottom>
+              <Typography gutterBottom sx={{ width: "50px" }}>
                 Début
               </Typography>
               </Grid>
               <Grid item xs>
                 <Slider
                   onChange={(e) => {setStartTime(e.target.value)}}
-                  aria-labelledby="input-slider"
+                  aria-labelledby="Choosing-start-hour"
                   defaultValue={0}
                   size="small"
                   step={1} 
@@ -51,7 +53,7 @@ const SideMenu = ({ setWeekDaySelected, setStartTime, setEndTime, weekDaySelecte
           <Box sx={{ width: "100%", paddingBottom: "40px"  }}>
             <Grid container spacing={2} alignItems="center">
               <Grid item>
-                <Typography id="input-slider" gutterBottom>
+                <Typography gutterBottom sx={{ width: "50px"}}>
                   Fin
                 </Typography>
               </Grid>
@@ -59,7 +61,7 @@ const SideMenu = ({ setWeekDaySelected, setStartTime, setEndTime, weekDaySelecte
                 <Slider
                   onChange={(e) => {setEndTime(e.target.value)}}
                   defaultValue={23}
-                  aria-labelledby="input-slider"
+                  aria-labelledby="Choosing-end-hour"
                   size="small"
                   step={1} 
                   marks min={0} 
@@ -81,13 +83,11 @@ const SideMenu = ({ setWeekDaySelected, setStartTime, setEndTime, weekDaySelecte
                 multiple
                 value={weekDaySelected}
                 onChange={handleWeekDays}
-                input={<OutlinedInput label="Jour" />}
-              >
+                input={<OutlinedInput label="Jour" />}>
                 {weekDays.map((day) => (
                   <MenuItem
                     key={day}
-                    value={day}
-                  >
+                    value={day}>
                     {weekDaysInFr[day]}
                   </MenuItem>
                 ))}
@@ -101,7 +101,14 @@ const SideMenu = ({ setWeekDaySelected, setStartTime, setEndTime, weekDaySelecte
           )}
           </Box> */}
           <Divider />
-          <Button onClick={handleOpen} variant="contained" disableElevation size="large" endIcon={<AddIcon />} sx={{ width: "100%", marginTop: "40px" }} >Ajouter un lieu</Button>
+          <Button 
+            onClick={handleOpen} 
+            variant="contained" 
+            disableElevation size="large" 
+            endIcon={<AddIcon />} 
+            sx={{ width: "100%", marginTop: "40px" }} >
+              Ajouter un lieu
+          </Button>
         </Box>
       </Drawer>
     );
