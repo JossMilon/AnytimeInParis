@@ -7,12 +7,12 @@ import axios from "axios";
 //Importing React elements
 import { useState } from "react";
 
-const AddLocationModal = ({ open, handleClose, weekDays, weekDaysInFr }) => {
+const AddLocationModal = ({ open, setOpen, handleClose, weekDays, weekDaysInFr, setOpenSnack, setSnackType, setSnackMessage }) => {
     //Declaring component usestate
-    const [name, setName] = useState("");
+    const [name, setName] = useState(undefined);
     const [description, setDescription] = useState("");
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
+    const [latitude, setLatitude] = useState(undefined);
+    const [longitude, setLongitude] = useState(undefined);
     const [openingTimes, setOpeningTimes] = useState({Monday: [[]], Tuesday: [[]], Wednesday: [[]], Thursday: [[]], Friday: [[]], Saturday: [[]], Sunday: [[]]});
     //Declaring component local handler function
     const addOpenings = (day) => {
@@ -35,12 +35,43 @@ const AddLocationModal = ({ open, handleClose, weekDays, weekDaysInFr }) => {
         newOpenings[day][timeIndex][1] = e.target.value;
         setOpeningTimes(newOpenings);
     };
+    const submitLocation = async () => {
+        try {
+            const formData =  {
+                name: name,
+                description: description,
+                latitude: latitude,
+                longitude: longitude,
+                monday: openingTimes.Monday,
+                tuesday: openingTimes.Tuesday,
+                wednesday: openingTimes.Wednesday,
+                thursday: openingTimes.Thursday,
+                friday: openingTimes.Friday,
+                saturday: openingTimes.Saturday,
+                sunday: openingTimes.Sunday
+            }
+            const response = await axios.post("https://anytimeinparis-back.herokuapp.com/add-location", formData);
+            console.log(response.data.message);
+            setSnackType("success");
+            setSnackMessage(response.data.message)
+            setOpen(false);
+            setOpenSnack(true);
+        }
+        catch(error) {
+            setOpen(false);
+            setSnackType("error");
+            setSnackMessage(error.response.data.message)
+            setOpenSnack(true);
+        }
+
+    };
     return (
         <Modal
             aria-labelledby="add-new-location-modal"
             open={open}
             onClose={handleClose}
             closeAfterTransition
+            keepMounted
             BackdropComponent={Backdrop}
             BackdropProps={{
             timeout: 500,
@@ -101,10 +132,10 @@ const AddLocationModal = ({ open, handleClose, weekDays, weekDaysInFr }) => {
                                     return (
                                         <>
                                             <Grid item xs={5}>
-                                                <TextField onChange={(e) => {handleOpenings(e, day, timeIndex)}} type="time" variant="outlined" size="small" InputProps={{endAdornment: <InputAdornment position="end">h</InputAdornment>}} />
+                                                <TextField onChange={(e) => {handleOpenings(e, day, timeIndex)}} type="number" variant="outlined" size="small" InputProps={{endAdornment: <InputAdornment position="end">h</InputAdornment>}} />
                                             </Grid>
                                             <Grid item xs={5}>
-                                                <TextField onChange={(e) => {handleClosings(e, day, timeIndex)}} type="time" variant="outlined" size="small" InputProps={{endAdornment: <InputAdornment position="end">h</InputAdornment>}} />
+                                                <TextField onChange={(e) => {handleClosings(e, day, timeIndex)}} type="number" variant="outlined" size="small" InputProps={{endAdornment: <InputAdornment position="end">h</InputAdornment>}} />
                                             </Grid>
                                             {timeIndex === openingTimes[day].length - 2 && 
                                                 <Grid item xs={2}>
@@ -125,7 +156,7 @@ const AddLocationModal = ({ open, handleClose, weekDays, weekDaysInFr }) => {
                             )
                         })}
                         <Grid item xs={12}>
-                            <Button variant="contained" disableElevation size="large" sx={{ width: "100%", marginTop: "40px" }} >Ajouter un lieu</Button>
+                            <Button onClick={submitLocation} variant="contained" disableElevation size="large" sx={{ width: "100%", marginTop: "40px" }} >Ajouter un lieu</Button>
                         </Grid>
                     </Grid>
                 </Box>

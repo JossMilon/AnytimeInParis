@@ -1,12 +1,7 @@
-// CHECK HOW TO ADD CSS RESET TO REACT PROJECTS
+import { Box, CssBaseline, Snackbar, Alert } from '@mui/material';
 
-import { Box, CssBaseline } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-
-//Importing assets
-import "./App.scss";
-import locationsFromJson from "./Assets/Data/paris-location.json"; 
-
+//Importing packages
+import axios from "axios";
 
 //Import React elements
 import {useState, useEffect} from "react";
@@ -31,18 +26,30 @@ function App() {
   };
   const tags = ["Bar 🍻", "Parc 🌳", "Club 💃", "Resto 👩‍🍳", "Culture 🎭", "Sport 🥊", "Commerce 🛍", "Loisir 🎳"];
   // Declaring component states
-  const [locations, setLocations] = useState(locationsFromJson.data); 
+  const [dbLocations, setDbLocations] = useState([]);
+  const [locations, setLocations] = useState([]); 
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(23);
   const [weekDaySelected, setWeekDaySelected] = useState(["Monday"]);
   const [open, setOpen] = useState(false);
+  const [openSnack, setOpenSnack] = useState(false);
+  const [snackType, setSnackType] = useState("");
+  const [snackMessage, setSnackMessage] = useState("");
   // Declaring handle functions
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("https://anytimeinparis-back.herokuapp.com/");
+      setDbLocations(response.data);
+      setLocations(response.data);
+    };
+    fetchData();
+  }, []);
   //Testing the logic with isSelected
   useEffect(() => {
     const timeSelected = startTime < endTime? [startTime, endTime] : [startTime, endTime + 24];
-    const filteredLocations = locationsFromJson.data.filter((location) => {
+    const filteredLocations = dbLocations.filter((location) => {
       let display = false;
       weekDaySelected.forEach((day) => {
         const openingHours = location.openings[day].map((openingBracket) => {return openingBracket[0] < openingBracket[1]? openingBracket : [openingBracket[0], openingBracket[1] + 24]});
@@ -59,8 +66,8 @@ function App() {
     setLocations(filteredLocations);
   }, [startTime, endTime, weekDaySelected]);
   return (
-    <Box sx={{ display: 'flex' }}>
-    <CssBaseline />
+    <Box sx={{ display: 'flex', position: 'relative' }}>
+      <CssBaseline />
       <NavBar 
         weekDaySelected={weekDaySelected} 
         startTime={startTime} 
@@ -79,10 +86,24 @@ function App() {
         locations={locations} />
       <AddLocationModal 
         open={open} 
+        setOpen={setOpen}
         handleClose={handleClose} 
         weekDays={weekDays} 
-        weekDaysInFr={weekDaysInFr} />
-  </Box>
+        weekDaysInFr={weekDaysInFr}
+        setOpenSnack={setOpenSnack} 
+        setSnackType={setSnackType}
+        setSnackMessage={setSnackMessage}  
+      />
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={6000}
+        onClose={() => {setOpenSnack(false)}}
+      >
+        <Alert severity={snackType} sx={{ width: '100%' }}>
+          {snackMessage}
+        </Alert>
+      </Snackbar>
+    </Box>
   );
 }
 

@@ -18,8 +18,10 @@ const Map = ({ locations }) => {
             return (
               <Marker key={location.properties.location_id} position={[location.geography.coordinates[0], location.geography.coordinates[1]]}>
                 <Popup>
-                  <p>{location.properties.NAME}</p>
-                  <p>{location.properties.DESCRIPTIO}</p>
+                  <p>{location.properties.name}</p>
+                  <p>{location.properties.description}</p>
+                  <p>Latitude: {location.geography.coordinates[0]}</p>
+                  <p>Latitude: {location.geography.coordinates[1]}</p>
                 </Popup>
               </Marker> 
             )
